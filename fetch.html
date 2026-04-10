@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fetch Practice</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { margin: 5px; padding: 10px; cursor: pointer; }
+    .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <h1>Fetch Practice</h1>
+
+  <button onclick="getSingleUser()">Get Single User</button>
+  <button onclick="getAllUsers()">Get All Users</button>
+  <button onclick="getUserPosts()">Get User 1 Posts</button>
+
+  <div id="output"></div>
+
+  <script>
+    const output = document.getElementById("output");
+
+    // 1. Get single user
+    async function getSingleUser() {
+      output.innerHTML = "Loading...";
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users/1");
+        const user = await res.json();
+
+        output.innerHTML = `
+          <div class="card">
+            <h3>${user.name}</h3>
+            <p>Email: ${user.email}</p>
+            <p>City: ${user.address.city}</p>
+          </div>
+        `;
+      } catch (err) {
+        output.innerHTML = "Error fetching user";
+        console.error(err);
+      }
+    }
+
+    // 2. Get all users
+    async function getAllUsers() {
+      output.innerHTML = "Loading...";
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users");
+        const users = await res.json();
+
+        output.innerHTML = users.map(user => `
+          <div class="card">
+            <h3>${user.name}</h3>
+            <p>Email: ${user.email}</p>
+          </div>
+        `).join("");
+      } catch (err) {
+        output.innerHTML = "Error fetching users";
+        console.error(err);
+      }
+    }
+
+    // 3. Get posts for user 1
+    async function getUserPosts() {
+      output.innerHTML = "Loading...";
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users/1/posts");
+        const posts = await res.json();
+
+        output.innerHTML = posts.map(post => `
+          <div class="card">
+            <h4>${post.title}</h4>
+            <p>${post.body}</p>
+          </div>
+        `).join("");
+      } catch (err) {
+        output.innerHTML = "Error fetching posts";
+        console.error(err);
+      }
+    }
+  </script>
+
+</body>
+</html>
